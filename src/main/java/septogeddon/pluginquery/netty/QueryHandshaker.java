@@ -56,6 +56,7 @@ public class QueryHandshaker extends ChannelInboundHandlerAdapter {
                                 pipe.forEach(entry -> pipe.remove(entry.getKey()));
                                 // initialize query channel
                                 PreparedQueryConnection.handshakenConnection(protocol, pipe);
+                                buf.release();
                                 return;
                             } else {
                                 throw new IllegalArgumentException("invalid encryption");

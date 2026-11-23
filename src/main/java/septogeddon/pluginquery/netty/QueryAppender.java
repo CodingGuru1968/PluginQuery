@@ -23,8 +23,14 @@ public class QueryAppender extends ByteToMessageDecoder {
             }
             buf[i] = in.readByte();
             if (buf[i] >= 0) {
-                final int length = readUnsignedShort(Unpooled.wrappedBuffer(buf));
-                if (length == 0) {
+            	final ByteBuf header = Unpooled.wrappedBuffer(buf);
+            	final int length;
+            	try {
+            	    length = readUnsignedShort(header);
+            	} finally {
+            	    header.release();
+            	}
+            	if (length == 0) {
                     throw new IOException("invalid packet");
                 }
                 if (in.readableBytes() < length) {
